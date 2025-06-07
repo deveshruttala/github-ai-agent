@@ -1,8 +1,7 @@
-from sqlalchemy.ext.declarative import declarative_base
+# models.py
 from sqlalchemy import Column, String, Integer, DateTime, Text
 from datetime import datetime
-
-Base = declarative_base()
+from db import Base 
 
 class StarUser(Base):
     __tablename__ = 'star_users'

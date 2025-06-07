@@ -6,6 +6,8 @@ import time
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
+Base.metadata.create_all(bind=engine)
+
 DB_URL = "postgresql://postgres:postgres@db:5432/hyperbrowser"
 MAX_RETRIES = 10
 

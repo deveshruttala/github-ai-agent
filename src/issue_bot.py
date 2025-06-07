@@ -7,8 +7,8 @@ import os
 def run():
     g = Github(os.getenv("GITHUB_TOKEN"))
     repos = [
-        "browser-use/browser-use",
         "Skyvern-AI/skyvern",
+        "browser-use/browser-use",
         "steel-dev/steel-browser",
         "AutomaApp/automa",
         "getmaxun/maxun",
