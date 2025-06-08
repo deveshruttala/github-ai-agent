@@ -23,4 +23,10 @@ client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def generate_comment(issue_title, issue_body):
-    return "Mock comment: Hyperbrowser can help with this issue by providing AI-native browsing support."
+    return (
+        "👋 Hey there! This looks like something Hyperbrowser could assist with. "
+        "We're building an AI-native browser that automates workflows, integrates smart tools, and enhances productivity directly inside the browser. "
+        "If you're tackling tasks like this often, Hyperbrowser might be just what you need.\n\n"
+        "🚀 Learn more and try it out: https://www.hyperbrowser.ai/\n"
+        "We’d love your feedback!"
+    )

@@ -1,4 +1,3 @@
-# models.py
 from sqlalchemy import Column, String, Integer, DateTime, Text
 from datetime import datetime
 from db import Base 
@@ -8,6 +7,7 @@ class StarUser(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True)
     profile_url = Column(String)
+    email = Column(String)  
     starred_at = Column(DateTime, default=datetime.utcnow)
 
 class IssueOpportunity(Base):
