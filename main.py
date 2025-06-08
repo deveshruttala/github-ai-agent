@@ -6,6 +6,9 @@ import os
 import time
 import sqlalchemy.exc
 from sqlalchemy import text
+import time
+import sys
+
 
 
 MAX_RETRIES = 10
@@ -25,7 +28,7 @@ def get_db_session():
         except Exception as e:
             print(f"❌ Unexpected DB error: {e} — retrying in {RETRY_DELAY}s...")
             time.sleep(RETRY_DELAY)
-    raise Exception("🚫 Could not connect to the database after several retries.")
+    raise Exception("🚫 Could not connect to the database after several retries.", flush=True)
 
 def run():
     init_db()
@@ -41,7 +44,7 @@ def run():
 
     try:
         for repo_name in repos:
-            print(f"\n🚀 Processing repo: {repo_name}")
+            print(f"\n🚀 Processing repo: {repo_name}", flush=True)
             try:
                 repo = g.get_repo(repo_name)
                 for issue in repo.get_issues(state='open'):
@@ -60,9 +63,9 @@ def run():
                         issue.create_comment(comment)
                     except GithubException as e:
                         if e.status == 403:
-                            print(f"🚫 GitHub 403 Forbidden on issue #{issue.number}, skipping comment.")
+                            print(f"🚫 GitHub 403 Forbidden on issue #{issue.number}, skipping comment.", flush=True)
                         else:
-                            print(f"⚠️ GitHub API error: {e}")
+                            print(f"⚠️ GitHub API error: {e}", flush=True)
                     except Exception as e:
                         print(f"⚠️ Error while generating/commenting: {e}")
 
@@ -75,21 +78,25 @@ def run():
                             comment=comment or "Comment failed or not posted."
                         )
                         session.add(entry)
-                        print(f"✅ Saved issue #{issue.number} to DB.")
+                        print(f"✅ Saved issue #{issue.number} to DB." , flush=True)
                     except Exception as db_err:
-                        print(f"❌ DB error on issue #{issue.number}: {db_err}")
+                        print(f"❌ DB error on issue #{issue.number}: {db_err}", flush=True)
                         session.rollback()
 
             except Exception as repo_err:
-                print(f"💥 Repo error for {repo_name}: {repo_err}")
+                print(f"💥 Repo error for {repo_name}: {repo_err}", flush=True)
 
         session.commit()
     except Exception as fatal:
-        print(f"🔥 Fatal error in bot execution: {fatal}")
+        print(f"🔥 Fatal error in bot execution: {fatal}", flush=True)
         session.rollback()
     finally:
         session.close()
         print("🎉 Bot run complete.")
 
 if __name__ == "__main__":
-    run()
+    while True:
+        print("🔄 Running GitHub issue bot...", flush=True)
+        run()
+        print("⏳ Sleeping for 5 minutes before next run...", flush=True)
+        time.sleep(300)  # 300 seconds = 5 minutes
