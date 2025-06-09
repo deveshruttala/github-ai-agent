@@ -1,5 +1,0 @@
-openai
-PyGithub
-psycopg2-binary
-sqlalchemy
-python-dotenv
